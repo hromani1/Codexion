@@ -1,10 +1,20 @@
-#include "codexion.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hromani <hromani@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/06 19:45:02 by hromani           #+#    #+#             */
+/*   Updated: 2026/11/06 19:45:21 by hromani          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "codexion.h"
 
 int	main(int argc, char **argv)
 {
 	t_config	config;
-
 
 	if (!parse(argc, argv, &config))
 		return (0);
