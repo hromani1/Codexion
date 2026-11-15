@@ -6,18 +6,18 @@
 /*   By: hromani <hromani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 21:22:09 by hromani           #+#    #+#             */
-/*   Updated: 2026/11/06 23:04:15 by hromani          ###   ########.fr       */
+/*   Updated: 2026/11/14 18:37:11 by hromani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-long	cmp_fifo(t_request *a, t_request *b)
+int	cmp_fifo(t_request *a, t_request *b)
 {
 	return (a->key - b->key);
 }
 
-long	cmp_edf(t_request *a, t_request *b)
+int	cmp_edf(t_request *a, t_request *b)
 {
 	if (a->key != b->key)
 		return (a->key - b->key);
@@ -52,5 +52,14 @@ void	heapify_down(t_heap *heap, int i)
 	{
 		swap(&heap->data[i], &heap->data[smallest]);
 		heapify_down(heap, smallest);
+	}
+}
+
+void	heapify_up(t_heap *heap, int i)
+{
+	while (i > 0 && heap->cmp(&heap->data[i], &heap->data[(i - 1) / 2]) < 0)
+	{
+		swap(&heap->data[i], &heap->data[(i - 1) / 2]);
+		i = (i - 1) / 2;
 	}
 }

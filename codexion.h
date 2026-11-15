@@ -6,7 +6,7 @@
 /*   By: hromani <hromani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 19:44:53 by hromani           #+#    #+#             */
-/*   Updated: 2026/11/06 23:04:42 by hromani          ###   ########.fr       */
+/*   Updated: 2026/11/14 18:45:49 by hromani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,48 @@ typedef struct s_simulation
 	t_coder			*coders;
 	t_dongle		*dongles;
 	pthread_t		monitor;
+	int				seq_counter;
+	pthread_mutex_t	seq_mutex;
+	int				globals_ready;
+	int				coders_ready;
+	int				dongles_ready;
 }	t_simulation;
 
+int			is_int_in_range(const char *str);
+void		*monitor_routine(void *arg);
+int			acquire_both(t_coder *coder, t_simulation *sim);
+void		release_both_dongles(t_coder *coder, t_simulation *sim);
+void		heap_push(t_heap *heap, t_request req);
+int			wait_turn(t_coder *coder, t_dongle *first,
+				t_dongle *second, t_simulation *sim);
+int			heap_is_empty(t_heap *heap);
+void		heap_destroy(t_heap *heap);
+t_request	heap_pop(t_heap *heap);
+t_request	heap_peek(t_heap *heap);
+void		*coder_routine(void *thread_coder);
 int			parse(int argc, char **argv, t_config *config);
 int			is_entirely_int(char *ptr);
-long		cmp_fifo(t_request *a, t_request *b);
-long		cmp_edf(t_request *a, t_request *b);
+void		heap_destroy(t_heap *heap);
+int			cmp_fifo(t_request *a, t_request *b);
+int			cmp_edf(t_request *a, t_request *b);
 void		swap(t_request *a, t_request *b);
 void		heapify_down(t_heap *heap, int i);
 int			error(char *msg);
 long long	get_timestamp_ms(void);
+long long	log_msg(t_simulation *sim, int id, char *msg);
+void		precise_sleep(long ms, t_simulation *sim);
+int			is_stopped(t_simulation *sim);
+long long	elapsed_time(t_simulation *sim);
+int			init_simulation(t_simulation *sim, t_config *config);
+void		set_stopped(t_simulation *sim);
+int			heap_init(t_heap *heap, int capacity, t_scheduler scheduler_type);
+int			clean_simulation(t_simulation *sim);
+void		heapify_up(t_heap *heap, int i);
+int			get_seq(t_simulation *sim);
+void		order_dongles(t_coder *coder, t_dongle **first, t_dongle **second);
+void		heap_remove(t_heap *heap, int coder_id);
+void		release_both_dongles(t_coder *coder, t_simulation *sim);
+void		release_dongle(t_dongle *dongle, t_simulation *sim);
+t_request	make_request(t_coder *coder, t_simulation *sim);
 
 #endif
