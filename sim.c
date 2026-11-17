@@ -6,7 +6,7 @@
 /*   By: hromani <hromani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 22:00:08 by hromani           #+#    #+#             */
-/*   Updated: 2026/11/14 16:30:52 by hromani          ###   ########.fr       */
+/*   Updated: 2026/11/15 17:14:05 by hromani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	init_dongles(t_simulation *sim)
 		sim->dongles[i].in_use = 0;
 		sim->dongles[i].available_at = 0;
 		sim->dongles[i].id = i;
+		sim->dongles_ready++;
 		i++;
 	}
 	return (1);
@@ -63,7 +64,10 @@ int	init_globals(t_simulation *sim)
 	if (pthread_mutex_init(&sim->log_mutex, NULL)
 		|| pthread_mutex_init(&sim->stop_mutex, NULL)
 		|| pthread_mutex_init(&sim->seq_mutex, NULL))
+	{
+		sim->globals_ready = 1;
 		return (error("mutex initialization incomplete!"));
+	}
 	return (1);
 }
 
